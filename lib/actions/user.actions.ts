@@ -159,6 +159,7 @@ export async function getActivity(userId: string) {
     connectToDB();
 
     // Find all threads created by the user
+    //find all threads where author is equal to  userId
     const userThreads = await Thread.find({ author: userId });
 
     // Collect all the child thread ids (replies) from the 'children' field of each user thread
@@ -169,7 +170,7 @@ export async function getActivity(userId: string) {
     // Find and return the child threads (replies) excluding the ones created by the same user
     const replies = await Thread.find({
       _id: { $in: childThreadIds },
-      author: { $ne: userId }, // Exclude threads authored by the same user
+      author: { $ne: userId }, //  Exclude threads authored by the same user
     }).populate({
       path: "author",
       model: User,
